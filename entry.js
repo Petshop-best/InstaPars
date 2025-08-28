@@ -46,7 +46,7 @@ app.post('/newRun', (req, res) => {
       const result = await runNewStats(username, password, profileUrls, dataFrom);
       console.log("RESULT EXISTS \n" + JSON.stringify(result, null, 2));
 
-      const webhookUrl = "https://твой-домен.com/webhook";
+      const webhookUrl = process.env.WEBHOOK_URL;
       await fetch(webhookUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
