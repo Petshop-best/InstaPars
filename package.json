@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "main": "entry.js",
   "dependencies": {
+    "dotenv": "^17.0.1",
     "express": "^5.1.0",
+    "pg": "^8.16.3",
     "puppeteer": "^22.15.0"
+  },
+  "scripts": {
+    "start": "node entry.js"
   }
 }

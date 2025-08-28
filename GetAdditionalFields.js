@@ -21,7 +21,7 @@ async function getAdditionalFields(linkArray){
 }
 
 async function getDateOfPage(page, link) {
-    await page.goto(link, { timeout: 60000 });
+    await page.goto(link, { timeout: 5000 });
     try{
         await page.waitForSelector('div[role="button"] svg[aria-label="Close"]', { visible: true });
         await page.click('div[role="button"] svg[aria-label="Close"]');
@@ -42,4 +42,4 @@ async function getDateOfPage(page, link) {
     console.log(datetime);
     return {description, datetime};
 }
-module.exports = { getAdditionalFields };
+module.exports = { getAdditionalFields, getDateOfPage };
