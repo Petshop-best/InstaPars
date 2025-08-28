@@ -32,30 +32,33 @@ app.post('/pars', async (req, res) =>{
     res.status(500).json({ error: err.toString() });
   }
 })
-app.post('/newRun', async (req, res) => {
+app.post('/newRun', (req, res) => {
   const { username, password, profileUrls, dataFrom } = req.body;
-  if (!username || !password || !profileUrls || !dataFrom){
+
+  if (!username || !password || !profileUrls || !dataFrom) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
+
   res.json({ status: "accepted" });
-  try {
-    const result = await runNewStats(username, password, profileUrls, dataFrom);
-    console.log("RESULT EXISTS \n" + JSON.stringify(result, null, 2));
-    const webhookUrl = process.env.WEBHOOK_URL;
+
+  (async () => {
     try {
+      const result = await runNewStats(username, password, profileUrls, dataFrom);
+      console.log("RESULT EXISTS \n" + JSON.stringify(result, null, 2));
+
+      const webhookUrl = "https://твой-домен.com/webhook";
       await fetch(webhookUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(result),
       });
       console.log("✅ Результат отправлен на вебхук");
-    } catch (webhookErr) {
-      console.error("❌ Ошибка при отправке на вебхук:", webhookErr);
+    } catch (err) {
+      console.error("❌ Ошибка при обработке:", err);
     }
-  } catch (err) {
-    res.status(500).json({ error: err.toString() });
-  }
+  })();
 });
+
 app.post('/run', async (req, res) => {
   const { username, password, profileUrl } = req.body;
 
