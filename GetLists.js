@@ -261,8 +261,14 @@ async function getReelsDataNew(page, profile) {
       const viewsSpan = Array.from(a.querySelectorAll('span')).find(el =>
       /^\d+([.,]?\d+)?[KM]?$/.test(el.textContent.trim())
     );
-    const viewsText = viewsSpan ? viewsSpan.textContent.trim() : null;
-    const views = parseViews(viewsText);
+    const parseViews = str => {
+      if (!str) return null;
+      str = str.replace(',', '.');
+      if (str.endsWith('K')) return parseFloat(str) * 1000;
+      if (str.endsWith('M')) return parseFloat(str) * 1000000;
+      return parseFloat(str);
+    };
+    const views = viewsSpan ? parseViews(viewsSpan.textContent.trim()) : null;
       return {href, views};
     });
   });
@@ -323,25 +329,6 @@ async function detectCaptcha(page) {
   if (captchaTextNodes.length > 0) return true;
 
   return false;
-}
-function parseViews(viewsText) {
-  if (!viewsText) return 0;
-
-  // Убираем пробелы и запятые
-  viewsText = viewsText.replace(/\s/g, '').replace(',', '.');
-
-  let multiplier = 1;
-
-  if (viewsText.endsWith('K')) {
-    multiplier = 1000;
-    viewsText = viewsText.slice(0, -1);
-  } else if (viewsText.endsWith('M')) {
-    multiplier = 1000000;
-    viewsText = viewsText.slice(0, -1);
-  }
-
-  const number = parseFloat(viewsText);
-  return Math.round(number * multiplier);
 }
 
 console.log('Экспортируем:', { getInst });
