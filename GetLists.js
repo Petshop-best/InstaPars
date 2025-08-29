@@ -262,12 +262,14 @@ async function getReelsDataNew(page, profile) {
       /^\d+([.,]?\d+)?[KM]?$/.test(el.textContent.trim())
     );
     const parseViews = str => {
-      if (!str) return null;
-      str = str.replace(',', '.');
-      if (str.endsWith('K')) return parseFloat(str) * 1000;
-      if (str.endsWith('M')) return parseFloat(str) * 1000000;
-      return parseFloat(str);
-    };
+        if (!str) return null;
+        str = str.replace(',', '.');
+        let num;
+        if (str.endsWith('K')) num = parseFloat(str) * 1000;
+        else if (str.endsWith('M')) num = parseFloat(str) * 1000000;
+        else num = parseFloat(str);
+        return num ? String(Math.round(num)) : null; // всегда строка
+      };
     const views = viewsSpan ? parseViews(viewsSpan.textContent.trim()) : null;
       return {href, views};
     });
