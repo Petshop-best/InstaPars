@@ -261,16 +261,15 @@ async function getReelsDataNew(page, profile) {
       const viewsSpan = Array.from(a.querySelectorAll('span')).find(el =>
       /^\d+([.,]?\d+)?[KM]?$/.test(el.textContent.trim())
     );
-    const parseViews = str => {
-        if (!str) return null;
-        str = str.replace(',', '.');
-        let num;
-        if (str.endsWith('K')) num = parseFloat(str) * 1000;
-        else if (str.endsWith('M')) num = parseFloat(str) * 1000000;
-        else num = parseFloat(str);
-        return num ? String(Math.round(num)) : null; // всегда строка
-      };
-    const views = viewsSpan ? parseViews(viewsSpan.textContent.trim()) : null;
+    const views = viewsSpan ? viewsSpan.textContent.trim() : null;
+    console.log("Found views span:", viewsSpan ? viewsSpan.textContent.trim() : 'none');
+    if (views) {
+      if (views.endsWith("K")) {
+        views = views.replace("K", "000");      // 10,5K -> 10,500
+      } else if (views.endsWith("M")) {
+        views = views.replace("M", "000000");   // 1.2M -> 1.200000
+      }
+    }
       return {href, views};
     });
   });
