@@ -263,13 +263,20 @@ async function getReelsDataNew(page, profile) {
     );
     let views = viewsSpan ? viewsSpan.textContent.trim() : null;
     console.log("Found views span:", viewsSpan ? viewsSpan.textContent.trim() : 'none');
-    if (views) {
+    if (views !== null) {
+      views = views.replace(',', '.'); // заменяем запятую на точку
+      let num;
       if (views.endsWith("K")) {
-        views = views.replace("K", "000");      // 10,5K -> 10,500
+        num = parseFloat(views.replace("K", "")) * 1000;
       } else if (views.endsWith("M")) {
-        views = views.replace("M", "000000");   // 1.2M -> 1.200000
+        num = parseFloat(views.replace("M", "")) * 1000000;
+      } else {
+        num = parseFloat(views);
       }
-    }
+
+  // если parseFloat не смог распарсить (NaN), то оставляем null
+  views = isNaN(num) ? null : String(Math.round(num));
+}
       return {href, views};
     });
   });
