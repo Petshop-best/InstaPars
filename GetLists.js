@@ -261,7 +261,7 @@ async function getReelsDataNew(page, profile) {
       const viewsSpan = Array.from(a.querySelectorAll('span')).find(el =>
       /^\d+([.,]?\d+)?[KM]?$/.test(el.textContent.trim())
     );
-    const views = viewsSpan ? viewsSpan.textContent.trim() : null;
+    let views = viewsSpan ? viewsSpan.textContent.trim() : null;
     console.log("Found views span:", viewsSpan ? viewsSpan.textContent.trim() : 'none');
     if (views) {
       if (views.endsWith("K")) {
