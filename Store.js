@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const { getUnhandledStore, markStoreHandled } = require('./DbOperations');   
 async function runStoreInfo() {
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: "new", args: ["--no-sandbox", "--disable-setuid-sandbox"] });
     const page = await browser.newPage();
     try {
         const result = await getUnhandledStore();
