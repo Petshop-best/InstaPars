@@ -1,6 +1,7 @@
 const express = require('express')
 const { runStats} = require('./script');
 const { runNewStats } = require('./script');
+const { runStoreInfo } = require('./Store');
 
 require('dotenv').config({ path: __dirname + '/.env' });
 console.log('Loaded env in entry.js, DATABASE_URL:', process.env.DATABASE_URL);
@@ -92,6 +93,12 @@ app.get('/ping', async (req, res) => {
     console.error('DB error:', err);
     res.status(500).json({ error: 'Internal error' });
   }
+});
+
+app.get('/runStoreInfo', (req, res) => {
+  console.log('Store info endpoint hit');
+  runStoreInfo();
+  res.send('Server is running');
 });
 
 const PORT = process.env.PORT || 3000;

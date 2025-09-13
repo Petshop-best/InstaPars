@@ -23,4 +23,14 @@ async function insertPost(post) {
         [post.competitor, post.post_url, post.posr_date, post.content, post.views, post.isreels, post.collab_with]
     );
 }
-module.exports = { insertProfileUrl, getFullProfile, getProfilesPosts, insertPost };
+async function getUnhandledStore() {
+    return pool.query(
+        'SELECT site_url FROM store WHERE is_handled IS DISTINCT FROM true'
+    )
+}
+async function markStoreHandled(url, emails){
+    return pool.query(
+        'UPDATE store SET is_handled = true, email = $2 WHERE site_url = $1', [url, emails]
+    )
+}
+module.exports = { insertProfileUrl, getFullProfile, getProfilesPosts, insertPost, getUnhandledStore, markStoreHandled };
